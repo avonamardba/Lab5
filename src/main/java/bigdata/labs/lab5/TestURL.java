@@ -1,4 +1,5 @@
 package bigdata.labs.lab5;
 
-public class TestURL {
+public class TestURL implements Comparable<TestURL>{
+    
 }

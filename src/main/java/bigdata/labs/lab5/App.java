@@ -46,7 +46,7 @@ public class App extends AllDirectives {
         String startMessage = String.format("App started at http://%s:%d/\\", HOSTNAME, PORT);
         System.out.println(startMessage);
         System.in.read();
-        binding.thenCompose(serverBinding -> serverBinding.unbind())
+        binding.thenCompose(ServerBinding::unbind)
                 .thenAccept(unbound -> system.terminate());
     }
 }

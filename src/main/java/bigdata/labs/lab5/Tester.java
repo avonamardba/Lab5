@@ -46,7 +46,7 @@ public class Tester {
                 .mapAsync(numOfRequests,
                         url -> {
                             Instant requestStart = Instant.now();
-                            return async
+                            return httpClient
                         })
     }
 

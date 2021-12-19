@@ -2,27 +2,18 @@ package bigdata.labs.lab5;
 
 public class TestResult {
     private final TestURL test;
-    private final Long expectedResult;
-    private final Boolean success;
+    private final Long time;
 
-    @JsonCreator
-    public TestResult(@JsonProperty("expectedResult") String expectedResult,
-                      @JsonProperty("actualResult") String actualResult,
-                      @JsonProperty("success") Boolean success) {
-        this.expectedResult = expectedResult;
-        this.actualResult = actualResult;
-        this.success = success;
+    public TestResult(TestURL test, Long time) {
+        this.test = test;
+        this.time = time;
     }
 
-    public String getExpectedResult() {
-        return expectedResult;
+    public TestURL getTest() {
+        return test;
     }
 
-    public String getActualResult() {
-        return actualResult;
-    }
-
-    public Boolean getSuccess() {
-        return success;
+    public Long getTime() {
+        return time;
     }
 }

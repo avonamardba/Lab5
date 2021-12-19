@@ -36,7 +36,7 @@ public class App extends AllDirectives {
         final Http http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);
 
-        final AsyncHttpClient httpClient = htt
+        final AsyncHttpClient asyncHttpClient = asynchttp
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = instance.createRoute().flow(system, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,

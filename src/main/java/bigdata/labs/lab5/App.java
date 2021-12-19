@@ -25,9 +25,7 @@ import static akka.http.javadsl.server.PathMatchers.segment;
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 public class App extends AllDirectives {
-    private static final int TIMEOUT = 3000;
     private static final String ACTOR_SYSTEM_NAME = "routes";
-    private static final String START_MESSAGE= "Start";
     private static final String HOSTNAME = "localhost";
     private static final int PORT = 8080;
 
@@ -45,7 +43,7 @@ public class App extends AllDirectives {
                 ConnectHttp.toHost(HOSTNAME, PORT),
                 materializer);
 
-        String startMessage = String.format("Server started at http://%s:%d/\\", HOSTNAME, PORT);
+        String startMessage = String.format("App started at http://%s:%d/\\", HOSTNAME, PORT);
         System.out.println(startMessage);
         System.in.read();
         binding.thenCompose(serverBinding -> serverBinding.unbind())

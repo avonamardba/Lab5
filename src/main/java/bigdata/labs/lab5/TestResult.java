@@ -20,6 +20,6 @@ public class TestResult {
     }
 
     public Optional<TestResult> get() {
-        
+        return this.getTime() != null 
     }
 }

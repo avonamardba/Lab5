@@ -10,6 +10,7 @@ import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Sink;
+import akka.stream.javadsl.Source;
 import org.asynchttpclient.AsyncHttpClient;
 
 import java.time.Duration;
@@ -47,15 +48,12 @@ public class Tester {
         testSink = Flow.of(TestURL.class)
                 .mapConcat(t -> Collections.nCopies(t.getCount(), t.getUrl()))
                 .mapAsync(numOfRequests,
-                        url -> {
-                            Instant requestStart = Instant.now();
-                            return httpClient.prepareGet(url).execute()
-                                    .toCompletableFuture()
-                                    .thenCompose(response -> CompletableFuture.completedFuture(
-                                            Duration.between(requestStart, Instant.now()).getSeconds())
-                                    );
-                        })
+                        this::apply)
                 .toMat(Sink.fold(0L, Long::sum), Keep.right());
+        return Source.from(Collections.singleton(test))
+                .toMat(testSink, Keep.right())
+                .run(materializer)
+                .thenApply(sum -> new TestResult(test, sum / test.getCount()));
     }
 
     public Flow<HttpRequest, HttpResponse, NotUsed> createRoute() {
@@ -77,5 +75,14 @@ public class Tester {
 
     public int getNumOfRequests() {
         return numOfRequests;
+    }
+
+    private CompletionStage<Long> apply(String url) {
+        Instant requestStart = Instant.now();
+        return httpClient.prepareGet(url).execute()
+                .toCompletableFuture()
+                .thenCompose(response -> CompletableFuture.completedFuture(
+                        Duration.between(requestStart, Instant.now()).getSeconds())
+                );
     }
 }

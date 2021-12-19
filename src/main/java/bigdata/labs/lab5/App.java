@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 
 import static akka.http.javadsl.server.PathMatchers.segment;
+import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 public class App extends AllDirectives {
     private static final int TIMEOUT = 3000;
@@ -36,8 +37,9 @@ public class App extends AllDirectives {
         final Http http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);
 
-        final AsyncHttpClient asyncHttpClient = asynchttp
-        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = instance.createRoute().flow(system, materializer);
+        final AsyncHttpClient asyncHttpClient = asyncHttpClient();
+        final Tester tester = new Tester(materializer, system, asyncHttpClient);
+        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = tester.createRoute();
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
                 ConnectHttp.toHost(HOSTNAME, PORT),

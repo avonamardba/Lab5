@@ -8,8 +8,11 @@ import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.model.Query;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
+import akka.stream.javadsl.Sink;
 import org.asynchttpclient.AsyncHttpClient;
 
+import java.time.Instant;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
@@ -36,7 +39,16 @@ public class Tester {
         return new TestURL(testUrl.get(), Integer.parseInt(count.get()));
     }
 
-    private CompletionStage<TestResult>
+    private CompletionStage<TestResult> executeTest(TestURL test) {
+        Sink<TestURL, CompletionStage<Long>> testSink;
+        testSink = Flow.of(TestURL.class)
+                .mapConcat(t -> Collections.nCopies(t.getCount(), t.getUrl()))
+                .mapAsync(numOfRequests,
+                        url -> {
+                            Instant requestStart = Instant.now();
+                            return async
+                        })
+    }
 
     public Flow<HttpRequest, HttpResponse, NotUsed> createRoute() {
         return Flow.of(HttpRequest.class)

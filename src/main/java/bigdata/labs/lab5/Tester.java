@@ -22,15 +22,17 @@ public class Tester {
     private static final String URL = "testUrl";
 
     public Tester(ActorMaterializer materializer, ActorSystem system, AsyncHttpClient httpClient) {
-       this.materializer = materializer;
-       this.storage = system.actorOf(StorageActor.props());
-       this.httpClient = httpClient;
-       this.numOfRequests = NUM_OF_REQUESTS;
+        this.materializer = materializer;
+        this.storage = system.actorOf(StorageActor.props());
+        this.httpClient = httpClient;
+        this.numOfRequests = NUM_OF_REQUESTS;
     }
 
     public TestURL parseRequest(HttpRequest request) {
         Query q = request.getUri().query();
-        Optional<String> testUrl = q.get()
+        Optional<String> testUrl = q.get(URL);
+        Optional<String> count = q.get(COUNT);
+        return new TestURL(testUrl.get(), Integer.parseInt(count.get()));
     }
 
     public Flow<HttpRequest, HttpResponse, NotUsed> createRoute() {

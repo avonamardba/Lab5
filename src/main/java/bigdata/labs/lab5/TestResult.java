@@ -20,6 +20,9 @@ public class TestResult {
     }
 
     public Optional<TestResult> get() {
-        return this.getTime() != null 
+        if (this.getTime() != null) {
+            return Optional.of(this);
+        }
+        return Optional.empty();
     }
 }

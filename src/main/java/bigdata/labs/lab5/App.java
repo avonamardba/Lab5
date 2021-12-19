@@ -24,31 +24,9 @@ import static akka.http.javadsl.server.PathMatchers.segment;
 
 public class App extends AllDirectives {
     private static final int TIMEOUT = 3000;
-    private static final String ACTOR_SYSTEM_NAME = "App";
+    private static final String = "App";
     private static final String HOSTNAME = "localhost";
     private static final int PORT = 8080;
-
-
-    private final ActorRef routerActor;
-
-    private App(ActorRef routerActor) {
-        this.routerActor = routerActor;
-    }
-
-    private Route createRoute() {
-        return path("testapp", () -> route(
-                get(() -> parameter("packageId", packageId -> {
-                    Future<Object> result = Patterns.ask(routerActor, packageId, TIMEOUT);
-                    return completeOKWithFuture(result, Jackson.marshaller());
-                })),
-                post(() ->
-                        entity(Jackson.unmarshaller(TestPackage.class), msg -> {
-                            routerActor.tell(msg, ActorRef.noSender());
-                            return complete("ok");
-                        })
-                )
-        ));
-    }
 
     public static void main(String[] args) throws IOException {
         ActorSystem system = ActorSystem.create(ACTOR_SYSTEM_NAME);

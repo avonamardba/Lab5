@@ -1,9 +1,16 @@
 package bigdata.labs.lab5;
 
+import akka.NotUsed;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.http.javadsl.model.HttpRequest;
+import akka.http.javadsl.model.HttpResponse;
+import akka.http.javadsl.model.Query;
 import akka.stream.ActorMaterializer;
+import akka.stream.javadsl.Flow;
 import org.asynchttpclient.AsyncHttpClient;
+
+import java.util.Optional;
 
 public class Tester {
     private final ActorMaterializer materializer;
@@ -19,7 +26,15 @@ public class Tester {
        this.numOfRequests = NUM_OF_REQUESTS;
     }
 
-    
+    public TestURL parseRequest(HttpRequest request) {
+        Query q = request.getUri().query();
+        Optional<String> testUrl = q.get()
+    }
+
+    public Flow<HttpRequest, HttpResponse, NotUsed> createRoute() {
+        return Flow.of(HttpRequest.class)
+                .map(this::)
+    }
 
     public ActorMaterializer getMaterializer() {
         return materializer;

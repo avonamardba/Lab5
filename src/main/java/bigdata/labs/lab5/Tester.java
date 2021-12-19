@@ -70,7 +70,8 @@ public class Tester {
                 .map(this::parseRequest)
                 .mapAsync(numOfRequests,
                         test -> Patterns.ask(storage, test, Duration.ofSeconds(5))
-                                .thenApply())
+                                .thenApply(r -> (TestURL)r)
+                                .thenCompose(res -> res.get))
     }
 
     public ActorMaterializer getMaterializer() {

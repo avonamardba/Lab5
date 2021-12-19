@@ -11,6 +11,7 @@ import akka.stream.javadsl.Flow;
 import org.asynchttpclient.AsyncHttpClient;
 
 import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 
 public class Tester {
     private final ActorMaterializer materializer;
@@ -35,7 +36,7 @@ public class Tester {
         return new TestURL(testUrl.get(), Integer.parseInt(count.get()));
     }
 
-    
+    private CompletionStage<TestResult>
 
     public Flow<HttpRequest, HttpResponse, NotUsed> createRoute() {
         return Flow.of(HttpRequest.class)

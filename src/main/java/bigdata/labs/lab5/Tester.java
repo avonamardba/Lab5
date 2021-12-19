@@ -6,6 +6,7 @@ import akka.actor.ActorSystem;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.model.Query;
+import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import akka.stream.javadsl.Keep;
@@ -66,7 +67,10 @@ public class Tester {
 
     public Flow<HttpRequest, HttpResponse, NotUsed> createRoute() {
         return Flow.of(HttpRequest.class)
-                .map(this::)
+                .map(this::parseRequest)
+                .mapAsync(numOfRequests,
+                        test -> Patterns.ask(storage, test, Duration.ofSeconds(5))
+                                .thenApply())
     }
 
     public ActorMaterializer getMaterializer() {

@@ -1,11 +1,8 @@
 package bigdata.labs.lab5;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class TestResult {
-    private final String actualResult;
-    private final String expectedResult;
+    private final TestURL test;
+    private final Long expectedResult;
     private final Boolean success;
 
     @JsonCreator

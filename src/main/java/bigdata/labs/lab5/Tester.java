@@ -73,13 +73,7 @@ public class Tester {
                                 .thenApply(r -> (TestResult) r)
                                 .thenCompose(result -> result.get().isPresent() ?
                                         CompletableFuture.completedFuture(result.get().get()) : executeTest(test)))
-                .map(res -> {
-                    storage.tell(res, ActorRef.noSender());
-                    return HttpResponse.create()
-                            .withStatus(StatusCodes.OK)
-                            .withEntity(ContentTypes.APPLICATION_JSON,
-                                    ByteString.fromString(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(res)));
-                });
+                .map(this::apply);
     }
 
     public ActorMaterializer getMaterializer() {
@@ -96,5 +90,13 @@ public class Tester {
 
     public int getNumOfRequests() {
         return numOfRequests;
+    }
+
+    private HttpResponse apply(TestResult res) {
+        storage.tell(res, ActorRef.noSender());
+        return HttpResponse.create()
+                .withStatus(StatusCodes.OK)
+                .withEntity(ContentTypes.APPLICATION_JSON,
+                        ByteString.fromString(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(res)));
     }
 }

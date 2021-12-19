@@ -11,6 +11,7 @@ import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
+import org.asynchttpclient.AsyncHttpClient;
 import scala.concurrent.Future;
 import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.server.AllDirectives;
@@ -31,13 +32,11 @@ public class App extends AllDirectives {
 
     public static void main(String[] args) throws IOException {
         ActorSystem system = ActorSystem.create(ACTOR_SYSTEM_NAME);
-        ActorRef routerActor = system.actorOf(Props.create(RouterActor.class, system), "routerActor");
 
         final Http http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);
 
-        App instance = new App(routerActor);
-
+        final AsyncHttpClient httpClient = htt
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = instance.createRoute().flow(system, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,

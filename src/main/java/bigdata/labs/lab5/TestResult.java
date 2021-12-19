@@ -1,5 +1,7 @@
 package bigdata.labs.lab5;
 
+import java.util.Optional;
+
 public class TestResult {
     private final TestURL test;
     private final Long time;
@@ -15,5 +17,9 @@ public class TestResult {
 
     public Long getTime() {
         return time;
+    }
+
+    public Optional<TestResult> get() {
+        
     }
 }

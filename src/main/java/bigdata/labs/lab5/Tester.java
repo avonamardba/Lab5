@@ -10,11 +10,12 @@ public class Tester {
     private ActorRef storage;
     private AsyncHttpClient httpClient;
     private int numOfRequests;
+    private static final int NUM_OF_REQUESTS = 10;
 
     public Tester(ActorMaterializer materializer, ActorSystem system, AsyncHttpClient httpClient) {
        this.materializer = materializer;
        this.storage = system.actorOf(StorageActor.props());
        this.httpClient = httpClient;
-       this.numOfRequests = 
+       this.numOfRequests = NUM_OF_REQUESTS;
     }
 }

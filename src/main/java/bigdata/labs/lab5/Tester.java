@@ -19,6 +19,7 @@ public class Tester {
     private final int numOfRequests;
     private static final int NUM_OF_REQUESTS = 10;
     private static final String COUNT = "count";
+    private static final String URL = "test";
 
     public Tester(ActorMaterializer materializer, ActorSystem system, AsyncHttpClient httpClient) {
        this.materializer = materializer;

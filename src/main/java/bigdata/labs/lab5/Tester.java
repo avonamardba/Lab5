@@ -39,7 +39,7 @@ public class Tester {
         Query q = request.getUri().query();
         Optional<String> testUrl = q.get(URL);
         Optional<String> count = q.get(COUNT);
-        return new TestURL(testUrl.get(), Integer.parseInt(count.get()));
+        return new TestURL(testUrl.orElse(null), Integer.parseInt(count.orElse(null)));
     }
 
     private CompletionStage<TestResult> executeTest(TestURL test) {

@@ -44,20 +44,18 @@ public class Tester {
         return new TestURL(testUrl.orElse(null), Integer.parseInt(count.orElse(null)));
     }
 
-    private CompletionStage<Long> countTime(String url) {
-        Instant requestStart = Instant.now();
-        return httpClient.prepareGet(url).execute()
-                .toCompletableFuture()
-                .thenCompose(response -> CompletableFuture.completedFuture(
-                        Duration.between(requestStart, Instant.now()).getSeconds())
-                );
-    }
-
     private CompletionStage<TestResult> executeTest(TestURL test) {
         Sink<TestURL, CompletionStage<Long>> testSink;
         testSink = Flow.of(TestURL.class)
                 .mapConcat(t -> Collections.nCopies(t.getCount(), t.getUrl()))
-                .mapAsync(numOfRequests, this::countTime)
+                .mapAsync(numOfRequests, url -> {
+                    Instant requestStart = Instant.now();
+                    return httpClient.prepareGet(url).execute()
+                            .toCompletableFuture()
+                            .thenCompose(response -> CompletableFuture.completedFuture(
+                                    Duration.between(requestStart, Instant.now()).getSeconds())
+                            );
+                })
                 .toMat(Sink.fold(0L, Long::sum), Keep.right());
         return Source.from(Collections.singleton(test))
                 .toMat(testSink, Keep.right())

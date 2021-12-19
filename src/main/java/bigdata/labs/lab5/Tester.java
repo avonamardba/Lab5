@@ -18,4 +18,22 @@ public class Tester {
        this.httpClient = httpClient;
        this.numOfRequests = NUM_OF_REQUESTS;
     }
+
+    
+
+    public ActorMaterializer getMaterializer() {
+        return materializer;
+    }
+
+    public ActorRef getStorage() {
+        return storage;
+    }
+
+    public AsyncHttpClient getHttpClient() {
+        return httpClient;
+    }
+
+    public int getNumOfRequests() {
+        return numOfRequests;
+    }
 }

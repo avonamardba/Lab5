@@ -1,26 +1,20 @@
 package bigdata.labs.lab5;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.ArrayList;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.stream.ActorMaterializer;
+import org.asynchttpclient.AsyncHttpClient;
 
 public class Tester {
-    private String packageId;
-    private ArrayList<TestResult> results;
+    private ActorMaterializer materializer;
+    private ActorRef storage;
+    private AsyncHttpClient httpClient;
+    private int numOfRequests;
 
-    @JsonCreator
-    public Tester(@JsonProperty("packageId") String packageId,
-                  @JsonProperty("tests") ArrayList<TestResult> results) {
-        this.packageId = packageId;
-        this.results = results;
-    }
-
-    public ArrayList<TestResult> getResults() {
-        return results;
-    }
-
-    public String getPackageId() {
-        return packageId;
+    public Tester(ActorMaterializer materializer, ActorSystem system, AsyncHttpClient httpClient) {
+       this.materializer = materializer;
+       this.storage = system.actorOf(StorageActor.props());
+       this.httpClient = httpClient;
+       this.numOfRequests = 
     }
 }

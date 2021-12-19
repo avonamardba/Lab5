@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.TreeMap;
 
 public class StorageActor extends AbstractActor {
-    private final HashMap<TestURL, Long> storage = new HashMap<>();
+    private HashMap<TestURL, Long> storage;
 
     public StorageActor() {
-        this.storage = new TreeMap<m>();
+        this.storage = new TreeMap<>();
     }
 
     public static Props props() {

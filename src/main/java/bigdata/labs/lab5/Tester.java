@@ -3,15 +3,15 @@ package bigdata.labs.lab5;
 import akka.NotUsed;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import akka.http.javadsl.model.HttpRequest;
-import akka.http.javadsl.model.HttpResponse;
-import akka.http.javadsl.model.Query;
+import akka.http.javadsl.model.*;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
+import akka.util.ByteString;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.asynchttpclient.AsyncHttpClient;
 
 import java.time.Duration;
@@ -70,8 +70,16 @@ public class Tester {
                 .map(this::parseRequest)
                 .mapAsync(numOfRequests,
                         test -> Patterns.ask(storage, test, Duration.ofSeconds(5))
-                                .thenApply(r -> (TestURL)r)
-                                .thenCompose(res -> res.get))
+                                .thenApply(r -> (TestResult) r)
+                                .thenCompose(result -> result.get().isPresent() ?
+                                        CompletableFuture.completedFuture(result.get().get()) : executeTest(test)))
+                .map(res -> {
+                    storage.tell(res, ActorRef.noSender());
+                    return HttpResponse.create()
+                            .withStatus(StatusCodes.OK)
+                            .withEntity(ContentTypes.APPLICATION_JSON,
+                                    ByteString.fromString(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(res)));
+                });
     }
 
     public ActorMaterializer getMaterializer() {

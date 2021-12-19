@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 
-public class RequestAnswers {
+public class Tester {
     private String packageId;
     private ArrayList<TestResult> results;
 
     @JsonCreator
-    public RequestAnswers(@JsonProperty("packageId") String packageId,
-                          @JsonProperty("tests") ArrayList<TestResult> results) {
+    public Tester(@JsonProperty("packageId") String packageId,
+                  @JsonProperty("tests") ArrayList<TestResult> results) {
         this.packageId = packageId;
         this.results = results;
     }

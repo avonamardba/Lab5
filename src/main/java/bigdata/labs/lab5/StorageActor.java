@@ -1,4 +1,4 @@
-package bigdata.labs.lab4;
+package bigdata.labs.lab5;
 
 import akka.actor.AbstractActor;
 import akka.japi.pf.ReceiveBuilder;

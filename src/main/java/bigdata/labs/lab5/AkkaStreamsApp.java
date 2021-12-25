@@ -45,7 +45,8 @@ public class AkkaStreamsApp extends AllDirectives{
                 materializer
         );
 
-        System.out.printf("Server online at https://%s:%d%n", HOST, PORT);
+        String startMessage = String.format("App started at http://%s:%d/\\", HOST, PORT);
+        System.out.println(startMessage);
         System.in.read();
 
         binding

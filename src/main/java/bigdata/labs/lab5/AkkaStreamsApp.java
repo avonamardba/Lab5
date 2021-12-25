@@ -31,7 +31,6 @@ public class AkkaStreamsApp extends AllDirectives{
     }
 
     public static void main(String[] args) throws IOException {
-        System.out.println("start!");
         ActorSystem system = ActorSystem.create("routes");
 
         final Http http = Http.get(system);
@@ -46,7 +45,7 @@ public class AkkaStreamsApp extends AllDirectives{
                 materializer
         );
 
-        System.out.println("Server online");
+        System.out.printf("Server online at%s:%d%n", HOST, PORT);
         System.in.read();
 
         binding
